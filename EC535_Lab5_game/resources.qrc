@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>Background_WIP.png</file>
+        <file>Menu_placeholder.png</file>
+        <file>Game_over_screen.png</file>
+    </qresource>
+</RCC>
