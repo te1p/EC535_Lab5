@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "score.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,7 +25,16 @@ private slots:
 
     void on_menuButton_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
+
 private:
     Ui::MainWindow *ui;
+    Score *scores;
 };
 #endif // MAINWINDOW_H

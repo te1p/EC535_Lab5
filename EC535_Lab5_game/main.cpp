@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "score.h"
 
 #include <QApplication>
 #include <QGraphicsScene>
