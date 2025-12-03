@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file>assets/1.png</file>
+        <file>assets/2.png</file>
+        <file>assets/A horizontal dramati.png</file>
+        <file>assets/A horizontal sci-fi .png</file>
+        <file>assets/A vibrant 2D space-t.png</file>
+        <file>assets/Asteroid.png</file>
+        <file>assets/Background_space_entry_WIP.png</file>
+        <file>assets/Background_WIP.png</file>
+        <file>assets/bullet.jpg</file>
+        <file>assets/Bullet.png</file>
+        <file>assets/darkspace.jpg</file>
+        <file>assets/Enemy.png</file>
+        <file>assets/Explosion.png</file>
+        <file>assets/Logo.png</file>
+        <file>assets/Long_Background_WIP.png</file>
+        <file>assets/Pause.png</file>
+        <file>assets/pinkship.jpg</file>
+        <file>assets/Player.png</file>
+        <file>assets/spiral.jpg</file>
+        <file>assets/Start.png</file>
+        <file>assets/streaks.jpg</file>
+        <file>assets/backie.jpg</file>
+        <file>assets/enem.jpg</file>
+        <file>assets/new_enemy.jpg</file>
+        <file>assets/cloudy.jpg</file>
+        <file>assets/corners.jpg</file>
+        <file>assets/nicercloudy.jpg</file>
+        <file>assets/planett.jpg</file>
+        <file>assets/stary.jpg</file>
+    </qresource>
+</RCC>
