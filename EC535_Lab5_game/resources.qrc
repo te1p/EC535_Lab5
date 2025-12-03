@@ -1,7 +1,12 @@
 <RCC>
-    <qresource prefix="/img">
-        <file>Background_WIP.png</file>
-        <file>Menu_placeholder.png</file>
-        <file>Game_over_screen.png</file>
+    <qresource prefix="/assets">
+        <file>assets/Asteroid.png</file>
+        <file>assets/Bullet.png</file>
+        <file>assets/Enemy.png</file>
+        <file>assets/Explosion.png</file>
+        <file>assets/Logo.png</file>
+        <file>assets/Pause.png</file>
+        <file>assets/Player.png</file>
+        <file>assets/Start.png</file>
     </qresource>
 </RCC>

@@ -16,17 +16,25 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        mainwindow.ui
+
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(EC535_Lab5_game
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        resources.qrc
+
         score.h score.cpp
         scores.txt
         wave.h wave.cpp
+        bullet.h bullet.cpp
+        Enemy.h Enemy.cpp
+        Explosion.h Explosion.cpp
+        GameScene.h GameScene.cpp
+        Player.h Player.cpp
+        resources.qrc
+
 
     )
 # Define target properties for Android with Qt 6 as:
