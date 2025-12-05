@@ -142,8 +142,10 @@ GameScene::GameScene(QObject *parent)
 
     //Automatic shooting
     // Faster bullets in late game
-    // shootTimer = new QTimer(this);
-    // int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
+    shootTimer = new QTimer(this);
+    //int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
+    connect(shootTimer, SIGNAL(timeout()), player, SLOT(shoot()));
+    shootTimer->start(100);
     // player->shoot(bulletSpeed);
 
     // Track intro fade timing
@@ -191,11 +193,11 @@ void GameScene::keyPressEvent(QKeyEvent *event)
     {
         downPressed = true;
     }
-    // else if (event->key() == Qt::Key_Space) {
-    //     // Faster bullets in late game
-    //     int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
-    //     player->shoot(bulletSpeed);
-    // }
+    else if (event->key() == Qt::Key_Space) {
+        // Faster bullets in late game
+        // int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
+        // player->shoot(bulletSpeed);
+    }
     else if (event->key() == Qt::Key_Escape) {
         // Enter pause mode
         isPaused = true;

@@ -14,8 +14,8 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent) {
 void Player::shoot(int bulletSpeed) {
     // Create a new upward-moving bullet from the player's center
     Bullet *bullet = new Bullet(Bullet::PlayerBullet, bulletSpeed);
-    bullet->setPos(x() + pixmap().width() / 2 - bullet->pixmap().width() / 2,
-                   y());
+    bullet->setPos(x(),
+                   y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
     scene()->addItem(bullet);
 }
 

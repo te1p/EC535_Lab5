@@ -31,6 +31,7 @@ private:
     Player *player;       // main player object
     QTimer *gameTimer;    // drives game updates
     QTimer *spawnTimer;   // controls enemy spawn rate
+    QTimer *shootTimer;   // automatically shoots bullets for the player
 
     QPushButton *menuButton;  // pause menu "Exit" button
 

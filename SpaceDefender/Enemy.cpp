@@ -63,8 +63,8 @@ void Enemy::move() {
             Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
 
             // Position bullet at center-bottom of enemy sprite
-            bullet->setPos(x() + pixmap().width() / 2 - bullet->pixmap().width() / 2,
-                           y() + pixmap().height());
+            bullet->setPos(x() + pixmap().width(),
+                            y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
 
             if (scene())
                 scene()->addItem(bullet);
