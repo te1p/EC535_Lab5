@@ -12,7 +12,7 @@
 
 
 GameScene::GameScene(QObject *parent)
-    : QGraphicsScene(parent), leftPressed(false), rightPressed(false),
+    : QGraphicsScene(parent), leftPressed(false), rightPressed(false),upPressed(false), downPressed(false),
     spacePressed(false), isPaused(false), gameStarted(false), score(0),
     highScore(0), health(1000), gamePhase(0) {
 
@@ -140,6 +140,12 @@ GameScene::GameScene(QObject *parent)
     connect(spawnTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
     spawnTimer->start(2000);
 
+    //Automatic shooting
+    // Faster bullets in late game
+    // shootTimer = new QTimer(this);
+    // int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
+    // player->shoot(bulletSpeed);
+
     // Track intro fade timing
     startTime = QDateTime::currentMSecsSinceEpoch();
 
@@ -177,11 +183,19 @@ void GameScene::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key_Right) {
         rightPressed = true;
     }
-    else if (event->key() == Qt::Key_Space) {
-        // Faster bullets in late game
-        int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
-        player->shoot(bulletSpeed);
+    else if (event->key() == Qt::Key_Up)
+    {
+        upPressed = true;
     }
+    else if (event->key() == Qt::Key_Down)
+    {
+        downPressed = true;
+    }
+    // else if (event->key() == Qt::Key_Space) {
+    //     // Faster bullets in late game
+    //     int bulletSpeed = (gamePhase >= 3) ? 40 : 20;
+    //     player->shoot(bulletSpeed);
+    // }
     else if (event->key() == Qt::Key_Escape) {
         // Enter pause mode
         isPaused = true;
@@ -200,6 +214,10 @@ void GameScene::keyReleaseEvent(QKeyEvent *event) {
         leftPressed = false;
     else if (event->key() == Qt::Key_Right)
         rightPressed = false;
+    else if (event->key() == Qt::Key_Up)
+        upPressed = false;
+    else if (event-> key() == Qt::Key_Down)
+        downPressed = false;
 }
 
 void GameScene::spawnEnemy() {
@@ -233,6 +251,8 @@ void GameScene::updateGame() {
     // Player continuous movement
     if (leftPressed)  player->moveLeft();
     if (rightPressed) player->moveRight();
+    if (upPressed) player->moveUp();
+    if (downPressed) player->moveDown();
 
     // Update all moving objects
     QList<QGraphicsItem *> sceneItems = items();

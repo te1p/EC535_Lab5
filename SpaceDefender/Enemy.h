@@ -20,7 +20,7 @@ public slots:
 private:
     Type enemyType;            //Determines movement logic
     int speed;                 //Vertical movement speed
-    int startX;                //Starting horizontal position
+    int startY;                //Starting horizontal position
     int timeAlive;             //Used for sine wave movement
 };
 

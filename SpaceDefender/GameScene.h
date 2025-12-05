@@ -37,6 +37,8 @@ private:
     // Input state
     bool leftPressed;
     bool rightPressed;
+    bool upPressed;
+    bool downPressed;
     bool spacePressed;
     bool isPaused;
     bool gameStarted;

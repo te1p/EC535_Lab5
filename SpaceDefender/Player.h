@@ -13,6 +13,8 @@ public:
     void shoot(int bulletSpeed = 10);         // creates a bullet moving upward
     void moveLeft();                          // moves player left within bounds
     void moveRight();                         // moves player right within bounds
+    void moveUp();                          // moves player up within bounds
+    void moveDown();                         // moves player down within bounds
 };
 
 #endif // PLAYER_H

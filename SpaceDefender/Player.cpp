@@ -30,3 +30,17 @@ void Player::moveRight() {
     if (x() + pixmap().width() < 480)
         setPos(x() + 20, y());
 }
+
+void Player::moveUp()
+{
+    // Move up with screen-edge boundary (272px wide scene)
+    if (y() > 0)
+        setPos(x(), y() - 20);
+}
+
+void Player::moveDown()
+{
+    // Move down with screen-edge boundary (480px wide scene)
+    if (y() + pixmap().height() < 272)
+        setPos(x(), y() + 20);
+}

@@ -27,8 +27,8 @@ Enemy::Enemy(Type type, int speedMultiplier, QGraphicsItem *parent)
     }
 
     // Random start X within LCD screen width (approx 480)
-    startX = rand() % 450;       // enemy horizontal spawn position
-    setPos(startX, -60);         // appear slightly off-screen at the top
+    startY = (rand() % 257) + 10;       // enemy vertical spawn position
+    setPos(-60, startY);         // appear slightly off-screen at the top
 }
 
 Enemy::Type Enemy::getType() const { return enemyType; }
@@ -39,17 +39,17 @@ void Enemy::move() {
 
     if (enemyType == Asteroid || enemyType == StraightShip) {
         // Basic downward movement
-        setPos(x(), y() + speed);
+        setPos(x() + speed, y());
 
     }
     else if (enemyType == SineShip) {
         // Horizontal sine-wave movement formula
-        double newX = startX + 50 * qSin(0.15 * timeAlive);
-        setPos(newX, y() + speed);
+        double newY = startY + 50 * qSin(0.15 * timeAlive);
+        setPos(x() + speed, newY);
     }
 
     // Delete enemy once it leaves bottom of the screen
-    if (y() > 300) { // Off screen
+    if (x() > 520) { // Off screen
         if (scene())
             scene()->removeItem(this);
         delete this;
