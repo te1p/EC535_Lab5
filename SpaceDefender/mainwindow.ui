@@ -37,7 +37,7 @@
       <family>Orbitron</family>
       <pointsize>-1</pointsize>
       <italic>false</italic>
-      <fontweight>DemiBold</fontweight>
+
      </font>
     </property>
     <property name="acceptDrops">
@@ -117,7 +117,7 @@ QPushButton:pressed {
       <family>Orbitron</family>
       <pointsize>-1</pointsize>
       <italic>false</italic>
-      <fontweight>DemiBold</fontweight>
+
      </font>
     </property>
     <property name="acceptDrops">
@@ -197,7 +197,7 @@ QPushButton:pressed {
       <family>Orbitron</family>
       <pointsize>-1</pointsize>
       <italic>false</italic>
-      <fontweight>DemiBold</fontweight>
+
      </font>
     </property>
     <property name="acceptDrops">

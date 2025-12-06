@@ -1,73 +1,95 @@
 #include "Enemy.h"
 #include "Bullet.h"
-#include <QBrush>
 #include <QGraphicsScene>
 #include <QtMath>
 #include <stdlib.h> // rand() for randomness
 
-// Constructor: sets enemy sprite, movement speed, and starting position
-Enemy::Enemy(Type type, int speedMultiplier, QGraphicsItem *parent)
-    : QGraphicsPixmapItem(parent), enemyType(type), speed(5 * speedMultiplier),
-    timeAlive(0) {
-
-    // Choose sprite depending on enemy type
-    if (type == Asteroid) {
-        setPixmap(
-            QPixmap(":/assets/assets/Asteroid.png")
-                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else if (type == StraightShip) {
-        setPixmap(
-            QPixmap(":/assets/assets/Enemy.png")
-                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else if (type == SineShip) {
-        setPixmap(
-            QPixmap(":/assets/assets/enemy.png")
-                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        // Could visually distinguish sine ship
-    }
-
-    // Random start X within LCD screen width (approx 480)
-    startY = (rand() % 257) + 10;       // enemy vertical spawn position
-    setPos(-60, startY);         // appear slightly off-screen at the top
+Enemy::Enemy(int speedMultiplier, QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent), speed(5 * speedMultiplier), timeAlive(0) {
+  // Screen height is 272. Enemy height is 45.
+  // We want to spawn fully inside [0, 272].
+  // Max safe Y = 272 - 45 = 227.
+  startY = rand() % 228;
+  setPos(-60, startY);
 }
 
-Enemy::Type Enemy::getType() const { return enemyType; }
+void Enemy::commonMove() {
+  if (x() > 520) {
+    if (scene())
+      scene()->removeItem(this);
+    delete this;
+  }
+}
 
-// Handles movement each frame (called in GameScene::updateGame)
-void Enemy::move() {
-    timeAlive++;
+Asteroid::Asteroid(int speedMultiplier, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, parent) {
+  setPixmap(QPixmap(":/assets/assets/Asteroid.png")
+                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
 
-    if (enemyType == Asteroid || enemyType == StraightShip) {
-        // Basic downward movement
-        setPos(x() + speed, y());
+void Asteroid::move() {
+  timeAlive++;
+  setPos(x() + speed, y());
+  commonMove();
+}
 
-    }
-    else if (enemyType == SineShip) {
-        // Horizontal sine-wave movement formula
-        double newY = startY + 50 * qSin(0.15 * timeAlive);
-        setPos(x() + speed, newY);
-    }
+StraightShip::StraightShip(int speedMultiplier, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, parent) {
+  setPixmap(QPixmap(":/assets/assets/Enemy.png")
+                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
 
-    // Delete enemy once it leaves bottom of the screen
-    if (x() > 520) { // Off screen
-        if (scene())
-            scene()->removeItem(this);
-        delete this;
-        return;
-    }
+void StraightShip::move() {
+  timeAlive++;
+  setPos(x() + speed, y());
 
-    // Random shooting chance for ships (asteroids cannot shoot)
-    if (enemyType != Asteroid) {
-        if (rand() % 100 < 2) {  // ~2% chance each frame
-            int bulletSpeed = 10 * (speed / 5);   // scale bullet speed with enemy speed
-            Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
+  tryShoot();
+  commonMove();
+}
 
-            // Position bullet at center-bottom of enemy sprite
-            bullet->setPos(x() + pixmap().width(),
-                            y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
+void StraightShip::tryShoot() {
+  if (rand() % 100 < 2) {
+    int bulletSpeed = 10 * (speed / 5);
+    Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
+    bullet->setPos(x() + pixmap().width(),
+                   y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
 
-            if (scene())
-                scene()->addItem(bullet);
-        }
-    }
+    if (scene())
+      scene()->addItem(bullet);
+  }
+}
+
+SineShip::SineShip(int speedMultiplier, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, parent) {
+  setPixmap(QPixmap(":/assets/assets/Enemy.png")
+                .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+  // Recalculate startY for SineShip to stay on screen during wave movement
+  // Wave amplitude is 50. Buffer needed: 50 top, 50 bottom.
+  // Min Y = 50. Max Y = 272 - 45 - 50 = 177.
+  startY = (rand() % 128) + 50;
+  setPos(x(), startY);
+}
+
+void SineShip::move() {
+  timeAlive++;
+  double newY = startY + 50 * qSin(0.15 * timeAlive);
+  setPos(x() + speed, newY);
+
+  tryShoot();
+  commonMove();
+}
+
+void SineShip::tryShoot() {
+  // Same shooting logic as StraightShip
+  if (rand() % 100 < 2) {
+    int bulletSpeed = 10 * (speed / 5);
+    Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
+
+    bullet->setPos(x() + pixmap().width(),
+                   y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
+
+    if (scene())
+      scene()->addItem(bullet);
+  }
 }

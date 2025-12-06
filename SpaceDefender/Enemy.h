@@ -4,24 +4,57 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 
-// Enemy object (asteroid or ship) with different movement behaviors.
+// Abstract Base Class for all enemies
 class Enemy : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 
 public:
-    enum Type { Asteroid, StraightShip, SineShip }; //Movement pattern / sprite type
-    Enemy(Type type, int speedMultiplier = 1, QGraphicsItem *parent = nullptr);
-    Type getType() const;
+    Enemy(int speedMultiplier = 1, QGraphicsItem *parent = nullptr);
+    virtual ~Enemy() {}
+
+    virtual int getScoreValue() const = 0;
+    virtual int getDamageValue() const = 0;
 
 public slots:
-    void move();               //Updates position each frame
+    // Virtual move method to be implemented by subclasses
+    virtual void move() = 0;
+    void commonMove(); // Shared logic like checking bounds
 
-private:
-    Type enemyType;            //Determines movement logic
-    int speed;                 //Vertical movement speed
-    int startY;                //Starting horizontal position
-    int timeAlive;             //Used for sine wave movement
+protected:
+    int speed;
+    int startY;
+    int timeAlive;
+};
+
+// Subclasses
+class Asteroid : public Enemy {
+    Q_OBJECT
+public:
+    Asteroid(int speedMultiplier = 1, QGraphicsItem *parent = nullptr);
+    void move() override;
+    int getScoreValue() const override { return 50; }
+    int getDamageValue() const override { return 50; }
+};
+
+class StraightShip : public Enemy {
+    Q_OBJECT
+public:
+    StraightShip(int speedMultiplier = 1, QGraphicsItem *parent = nullptr);
+    void move() override;
+    int getScoreValue() const override { return 100; }
+    int getDamageValue() const override { return 100; }
+    void tryShoot();
+};
+
+class SineShip : public Enemy {
+    Q_OBJECT
+public:
+    SineShip(int speedMultiplier = 1, QGraphicsItem *parent = nullptr);
+    void move() override;
+    int getScoreValue() const override { return 100; }
+    int getDamageValue() const override { return 100; }
+    void tryShoot();
 };
 
 #endif // ENEMY_H
