@@ -10,11 +10,11 @@ Enemy::Enemy(int speedMultiplier, int health, QGraphicsItem *parent)
   // We want to spawn fully inside [0, 272].
   // Max safe Y = 272 - 45 = 227.
   startY = rand() % 228;
-  setPos(-60, startY);
+  setPos(520, startY);
 }
 
 void Enemy::commonMove() {
-  if (x() > 520) {
+  if (x() < -60) {
     if (scene())
       scene()->removeItem(this);
     delete this;
@@ -39,7 +39,7 @@ Asteroid::Asteroid(int speedMultiplier, int health, QGraphicsItem *parent)
 
 void Asteroid::move() {
   timeAlive++;
-  setPos(x() + speed, y());
+  setPos(x() - speed, y());
   commonMove();
 }
 
@@ -51,17 +51,17 @@ StraightShip::StraightShip(int speedMultiplier, int health, QGraphicsItem *paren
 
 void StraightShip::move() {
   timeAlive++;
-  setPos(x() + speed, y());
+  setPos(x() - speed, y());
 
   tryShoot();
   commonMove();
 }
 
 void StraightShip::tryShoot() {
-  if (rand() % 100 < 2) {
-    int bulletSpeed = 10 * (speed / 5);
+  if (rand() % 100 < 10) {
+    int bulletSpeed = 8 * (speed / 5);
     Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
-    bullet->setPos(x() + pixmap().width(),
+    bullet->setPos(x(),
                    y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
 
     if (scene())
@@ -84,7 +84,7 @@ SineShip::SineShip(int speedMultiplier, int health, QGraphicsItem *parent)
 void SineShip::move() {
   timeAlive++;
   double newY = startY + 50 * qSin(0.15 * timeAlive);
-  setPos(x() + speed, newY);
+  setPos(x() - speed, newY);
 
   tryShoot();
   commonMove();
@@ -92,11 +92,11 @@ void SineShip::move() {
 
 void SineShip::tryShoot() {
   // Same shooting logic as StraightShip
-  if (rand() % 100 < 2) {
-    int bulletSpeed = 10 * (speed / 5);
+  if (rand() % 100 < 5) {
+    int bulletSpeed = 8 * (speed / 5);
     Bullet *bullet = new Bullet(Bullet::EnemyBullet, bulletSpeed);
 
-    bullet->setPos(x() + pixmap().width(),
+    bullet->setPos(x(),
                    y() + pixmap().height() / 2 - bullet->pixmap().height() / 2);
 
     if (scene())

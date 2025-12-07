@@ -17,20 +17,20 @@ void Bullet::move()
 {
     if (bulletType == PlayerBullet) {
         // player bullets travel upward
-        setPos(x() - speed, y());
+        setPos(x() + speed, y());
 
         // remove when off-screen
-        if (y() + pixmap().width() < 0) {
+        if (x() + pixmap().width() > 500) {
             if (scene()) scene()->removeItem(this);
             delete this;
         }
     }
     else {
         // enemy bullets travel downward
-        setPos(x() + speed, y());
+        setPos(x() - speed, y());
 
         // remove when off-screen
-        if (x() > 520) {
+        if (x() < -30) {
             if (scene()) scene()->removeItem(this);
             delete this;
         }
