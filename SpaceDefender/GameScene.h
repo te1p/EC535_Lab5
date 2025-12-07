@@ -26,6 +26,7 @@ protected:
 private slots:
     void updateGame();    // main game loop called by timer
     void spawnEnemy();    // spawns enemies on an interval
+    void startWave();
 
 private:
     Player *player;       // main player object
@@ -49,6 +50,8 @@ private:
     int highScore;
     int health;
     int gamePhase; // 0: Start, 1: Asteroids, 2: +Straight, 3: +Sine, 4: Speed Up
+    int win;
+    int enemyNum;
 
     qint64 startTime;    // timestamp used for time-based background fade
 
@@ -63,6 +66,9 @@ private:
     // Two background layers used for transition
     QGraphicsPixmapItem *bg1;  // near-ground background
     QGraphicsPixmapItem *bg2;  // upper-space background
+
+    //layer for win text
+    QGraphicsPixmapItem *winText; //show after win conidition satisfied
 
     // Internal helpers
     void updateScore(int points);           // adds to score

@@ -4,8 +4,8 @@
 #include <QtMath>
 #include <stdlib.h> // rand() for randomness
 
-Enemy::Enemy(int speedMultiplier, QGraphicsItem *parent)
-    : QGraphicsPixmapItem(parent), speed(5 * speedMultiplier), timeAlive(0) {
+Enemy::Enemy(int speedMultiplier, int health, QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent), speed(5 * speedMultiplier), timeAlive(0), enemyHealth(health) {
   // Screen height is 272. Enemy height is 45.
   // We want to spawn fully inside [0, 272].
   // Max safe Y = 272 - 45 = 227.
@@ -21,8 +21,18 @@ void Enemy::commonMove() {
   }
 }
 
-Asteroid::Asteroid(int speedMultiplier, QGraphicsItem *parent)
-    : Enemy(speedMultiplier, parent) {
+void Enemy::updateHealth(int damage)
+{
+    enemyHealth -= damage;
+}
+
+int Enemy::getHealth()
+{
+    return enemyHealth;
+}
+
+Asteroid::Asteroid(int speedMultiplier, int health, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, health ,parent) {
   setPixmap(QPixmap(":/assets/assets/Asteroid.png")
                 .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
@@ -33,8 +43,8 @@ void Asteroid::move() {
   commonMove();
 }
 
-StraightShip::StraightShip(int speedMultiplier, QGraphicsItem *parent)
-    : Enemy(speedMultiplier, parent) {
+StraightShip::StraightShip(int speedMultiplier, int health, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, health, parent) {
   setPixmap(QPixmap(":/assets/assets/Enemy.png")
                 .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
@@ -59,8 +69,8 @@ void StraightShip::tryShoot() {
   }
 }
 
-SineShip::SineShip(int speedMultiplier, QGraphicsItem *parent)
-    : Enemy(speedMultiplier, parent) {
+SineShip::SineShip(int speedMultiplier, int health, QGraphicsItem *parent)
+    : Enemy(speedMultiplier, health, parent) {
   setPixmap(QPixmap(":/assets/assets/Enemy.png")
                 .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 

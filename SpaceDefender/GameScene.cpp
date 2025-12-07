@@ -9,12 +9,14 @@
 #include <QKeyEvent>
 #include <QTextStream>
 #include <stdlib.h> // rand
+#include <cmath>
+#include <iostream>
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene(parent), leftPressed(false), rightPressed(false),
       upPressed(false), downPressed(false), spacePressed(false),
-      isPaused(false), gameStarted(false), score(0), highScore(0), health(1000),
-      gamePhase(0) {
+    isPaused(false), gameStarted(false), score(0), highScore(0), health(1000),
+    gamePhase(0), win(0), enemyNum(0) {
 
   loadHighScore();
   // Initializes high score and all gameplay state variables.
@@ -36,6 +38,14 @@ GameScene::GameScene(QObject *parent)
   bg2->setZValue(-19);
   bg2->setOpacity(0.0); // starts invisible
   addItem(bg2);
+
+  // Win text
+  winText = new QGraphicsPixmapItem(
+      QPixmap(":/assets/assets/Win_Screen.png")
+          .scaled(480, 272, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+  winText->setZValue(-18);
+  winText->setOpacity(0.0); //starts invisible
+  addItem(winText);
 
   // HUD logo
   logoItem = new QGraphicsPixmapItem(
@@ -126,8 +136,42 @@ GameScene::GameScene(QObject *parent)
 
   // Enemy spawn timer
   spawnTimer = new QTimer(this);
-  connect(spawnTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
+  connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
   spawnTimer->start(2000);
+
+  // if ((win < 1) && (enemyNum < 1 + gamePhase*5))
+  // {
+  //     spawnTimer = new QTimer(this);
+  //     connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
+  //     spawnTimer->start(2000);
+  // }
+  // else if (enemyNum > (1 + gamePhase*5))
+  // {
+  //     enemyNum = 0;
+  //     gamePhase++;
+  // }
+  // else if(win == 1)
+  // {
+  //     winText->setOpacity(100.0);
+  //     gameTimer->stop();
+  //     spawnTimer->stop();
+
+  //     QEventLoop loop;
+  //     QTimer t;
+  //     t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+  //     t.start(5000);
+  //     loop.exec();
+
+  //     win++;
+  // }
+  // else if (win > 1)
+  // {
+  //     //endless mode
+  //     gamePhase = 2;
+  //     spawnTimer = new QTimer(this);
+  //     connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
+  //     spawnTimer->start(2000);
+  // }
 
   // Automatic shooting
   //  Faster bullets in late game
@@ -206,30 +250,139 @@ void GameScene::keyReleaseEvent(QKeyEvent *event) {
 void GameScene::spawnEnemy() {
   // Spawn ratios change as score increases (difficulty progression)
 
-  int speedMult = (gamePhase >= 3) ? 2 : 1;
-  int r = rand() % 100;
-  Enemy *enemy = nullptr;
+  // int speedMult = (gamePhase >= 3) ? 2 : 1;
+  // int r = rand() % 100;
+  // Enemy *enemy = nullptr;
 
-  if (gamePhase == 0) {
-    enemy = new Asteroid(speedMult);
-  } else if (gamePhase == 1) {
-    if (r < 50)
-      enemy = new Asteroid(speedMult);
-    else
-      enemy = new StraightShip(speedMult);
-  } else {
-    // Mix of all types
-    if (r < 33)
-      enemy = new Asteroid(speedMult);
-    else if (r < 66)
-      enemy = new StraightShip(speedMult);
-    else
-      enemy = new SineShip(speedMult);
+  // if (gamePhase == 0) {
+  //   enemy = new Asteroid(speedMult, 3);
+  // } else if (gamePhase == 1) {
+  //   if (r < 50)
+  //     enemy = new Asteroid(speedMult, 4);
+  //   else
+  //     enemy = new StraightShip(speedMult, 4);
+  // } else {
+  //   // Mix of all types
+  //   if (r < 33)
+  //     enemy = new Asteroid(speedMult, 3);
+  //   else if (r < 66)
+  //     enemy = new StraightShip(speedMult, 4);
+  //   else
+  //     enemy = new SineShip(speedMult, 4);
+  // }
+
+  // if (enemy)
+  //   addItem(enemy);
+
+  int speedMult = (gamePhase >= 2) ? 2 : 1;
+  int r = rand()%100;
+  int astHealth = 3;
+  int straHealth = 4;
+  int sinHealth = 4;
+  //int e = 0;
+  Enemy *enemy = nullptr;
+  if(win < 1)
+  {
+      enemyNum++;
+  }
+
+
+  switch(gamePhase)
+  {
+  case 0:
+      //add if statements for the type of enemy
+      //the higher the stage the higher the chance of harder enemies
+      //On a high enough wave boss spawns and immediately increases phase by 1 to initiate mob enemies
+      if (r < 70)
+      {
+          enemy = new Asteroid(speedMult, astHealth);
+      }
+      else
+      {
+          enemy = new StraightShip(speedMult, straHealth);
+      }
+      break;
+
+  case 1:
+      if (r < 40)
+      {
+          enemy = new Asteroid(speedMult, astHealth);
+      }
+      else if((r >= 40) && (r < 70))
+      {
+          enemy = new StraightShip(speedMult, straHealth);
+      }
+      else
+      {
+          enemy = new SineShip(speedMult, sinHealth);
+      }
+
+      break;
+
+  case 2:
+      if (r < 10)
+      {
+          enemy = new Asteroid(speedMult, astHealth);
+      }
+      else if((r >= 10) && (r < 70))
+      {
+          enemy = new StraightShip(speedMult, straHealth);
+      }
+      else
+      {
+          enemy = new SineShip(speedMult, sinHealth);
+      }
+      break;
+
+  case 3:
+      win++;
+      gamePhase = 2;
+      break;
   }
 
   if (enemy)
-    addItem(enemy);
+      addItem(enemy);
 }
+
+void GameScene::startWave()
+{
+
+    if ((win < 1) && (enemyNum < (5 + gamePhase*5)))
+    {
+        spawnEnemy();
+    }
+    else if (enemyNum >= (5 + gamePhase*5))
+    {
+        enemyNum = 0;
+        gamePhase++;
+    }
+    else if(win == 1)
+    {
+        winText->setOpacity(100.0);
+        gameTimer->stop();
+        spawnTimer->stop();
+
+        QEventLoop loop;
+        QTimer t;
+        t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+        t.start(5000);
+        loop.exec();
+
+        gameTimer->start();
+        spawnTimer->start();
+        winText->setOpacity(0.0);
+
+        win++;
+    }
+    else if (win > 1)
+    {
+        //endless mode
+        gamePhase = 2;
+        spawnEnemy();
+    }
+
+}
+
 
 void GameScene::updateGame() {
   // Player continuous movement
@@ -274,14 +427,22 @@ void GameScene::updateGame() {
 
 void GameScene::checkProgression() {
   // Score thresholds
-  if (score < 1000)
-    gamePhase = 0;
-  else if (score < 2000)
-    gamePhase = 1;
-  else if (score < 3000)
-    gamePhase = 2;
-  else
-    gamePhase = 3;
+  // if (score < 1000)
+  //   gamePhase = 0;
+  // else if (score < 2000)
+  //   gamePhase = 1;
+  // else if (score < 3000)
+  //   gamePhase = 2;
+  // else
+  //   gamePhase = 3;
+
+  //Checking for win condition
+
+  // if(gamePhase > 2)
+  // {
+      //win++;
+  // }
+
 }
 
 void GameScene::checkCollisions() {
@@ -348,13 +509,23 @@ void GameScene::checkCollisions() {
             // Player shoots enemy
             Enemy *e = dynamic_cast<Enemy *>(other);
 
-            updateScore(e->getScoreValue());
+            e->updateHealth(1);
+
+            if (e->getHealth() <= 0)
+            {
+                updateScore(e->getScoreValue());
+
+                Explosion *explosion = new Explosion();
+                explosion->setPos(e->x(), e->y());
+                addItem(explosion);
+
+                itemsToRemove.append(e);
+            }
 
             Explosion *explosion = new Explosion();
             explosion->setPos(e->x(), e->y());
             addItem(explosion);
 
-            itemsToRemove.append(e);
             itemsToRemove.append(b);
             break;
           }

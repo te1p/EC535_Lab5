@@ -16,8 +16,7 @@ SOURCES += \
     Player.cpp \
     Enemy.cpp \
     Bullet.cpp \
-    Explosion.cpp \
-    wave.cpp
+    Explosion.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -25,8 +24,7 @@ HEADERS += \
     Player.h \
     Enemy.h \
     Bullet.h \
-    Explosion.h \
-    wave.h
+    Explosion.h
 
 FORMS += \
     mainwindow.ui
