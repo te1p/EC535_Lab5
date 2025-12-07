@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file>assets/Asteroid.png</file>
+        <file>assets/Bullet.png</file>
+        <file>assets/Enemy.png</file>
+        <file>assets/Explosion.png</file>
+        <file>assets/Logo.png</file>
+        <file>assets/Pause.png</file>
+        <file>assets/Player.png</file>
+        <file>assets/Start.png</file>
+        <file>assets/corners.jpg</file>
+        <file>assets/Background_entry.png</file>
+        <file>assets/Background_middle.png</file>
+        <file>assets/Boss.png</file>
+        <file>assets/Win_Screen.png</file>
+    </qresource>
+</RCC>
