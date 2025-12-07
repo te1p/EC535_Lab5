@@ -139,39 +139,6 @@ GameScene::GameScene(QObject *parent)
   connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
   spawnTimer->start(2000);
 
-  // if ((win < 1) && (enemyNum < 1 + gamePhase*5))
-  // {
-  //     spawnTimer = new QTimer(this);
-  //     connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
-  //     spawnTimer->start(2000);
-  // }
-  // else if (enemyNum > (1 + gamePhase*5))
-  // {
-  //     enemyNum = 0;
-  //     gamePhase++;
-  // }
-  // else if(win == 1)
-  // {
-  //     winText->setOpacity(100.0);
-  //     gameTimer->stop();
-  //     spawnTimer->stop();
-
-  //     QEventLoop loop;
-  //     QTimer t;
-  //     t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
-  //     t.start(5000);
-  //     loop.exec();
-
-  //     win++;
-  // }
-  // else if (win > 1)
-  // {
-  //     //endless mode
-  //     gamePhase = 2;
-  //     spawnTimer = new QTimer(this);
-  //     connect(spawnTimer, SIGNAL(timeout()), this, SLOT(startWave()));
-  //     spawnTimer->start(2000);
-  // }
 
   // Automatic shooting
   //  Faster bullets in late game
@@ -248,31 +215,7 @@ void GameScene::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void GameScene::spawnEnemy() {
-  // Spawn ratios change as score increases (difficulty progression)
-
-  // int speedMult = (gamePhase >= 3) ? 2 : 1;
-  // int r = rand() % 100;
-  // Enemy *enemy = nullptr;
-
-  // if (gamePhase == 0) {
-  //   enemy = new Asteroid(speedMult, 3);
-  // } else if (gamePhase == 1) {
-  //   if (r < 50)
-  //     enemy = new Asteroid(speedMult, 4);
-  //   else
-  //     enemy = new StraightShip(speedMult, 4);
-  // } else {
-  //   // Mix of all types
-  //   if (r < 33)
-  //     enemy = new Asteroid(speedMult, 3);
-  //   else if (r < 66)
-  //     enemy = new StraightShip(speedMult, 4);
-  //   else
-  //     enemy = new SineShip(speedMult, 4);
-  // }
-
-  // if (enemy)
-  //   addItem(enemy);
+  // Spawn ratios change as game phase changes (difficulty progression)
 
   int speedMult = (gamePhase >= 2) ? 2 : 1;
   int r = rand()%100;
@@ -292,7 +235,7 @@ void GameScene::spawnEnemy() {
   case 0:
       //add if statements for the type of enemy
       //the higher the stage the higher the chance of harder enemies
-      //On a high enough wave boss spawns and immediately increases phase by 1 to initiate mob enemies
+      //After reaching a final phase a win condition will activate
       if (r < 70)
       {
           enemy = new Asteroid(speedMult, astHealth);
@@ -347,11 +290,11 @@ void GameScene::spawnEnemy() {
 void GameScene::startWave()
 {
 
-    if ((win < 1) && (enemyNum < (5 + gamePhase*5)))
+    if ((win < 1) && (enemyNum < (20 + gamePhase*5)))
     {
         spawnEnemy();
     }
-    else if (enemyNum >= (5 + gamePhase*5))
+    else if (enemyNum >= (20 + gamePhase*5))
     {
         enemyNum = 0;
         gamePhase++;
