@@ -71,7 +71,7 @@ void StraightShip::tryShoot() {
 
 SineShip::SineShip(int speedMultiplier, int health, QGraphicsItem *parent)
     : Enemy(speedMultiplier, health, parent) {
-  setPixmap(QPixmap(":/assets/assets/Boss.png")
+  setPixmap(QPixmap(":/assets/assets/Enemy.png")
                 .scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   // Recalculate startY for SineShip to stay on screen during wave movement
   // Wave amplitude is 50. Buffer needed: 50 top, 50 bottom.
