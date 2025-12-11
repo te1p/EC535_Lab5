@@ -2,31 +2,36 @@
 #include <QBrush>
 #include <QGraphicsScene>
 
-// Creates a bullet (player or enemy) and assigns its speed + pixmap.
+// Creates a bullet with specified type and speed
+// type: PlayerBullet moves right, EnemyBullet moves left
+// speed: pixels per frame movement
 Bullet::Bullet(Type type, int speed, QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent), bulletType(type), speed(speed)
 {
-    // small bullet sprite
+    // Load bullet sprite and scale to 10x20 pixels
     setPixmap(QPixmap(":/assets/assets/Bullet.png")
                   .scaled(10, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
+// Move bullet based on type and remove when off-screen
 void Bullet::move()
 {
     if (bulletType == PlayerBullet) {
-        // player bullets travel RIGHT
+        // Player bullets travel RIGHT
         setPos(x() + speed, y());
-        // remove when off-screen RIGHT
-        if (x() > 480) {  // FIXED: was checking < 0
+        
+        // Remove when off-screen to the right
+        if (x() > 480) {
             if (scene()) scene()->removeItem(this);
             delete this;
         }
     }
     else {
-        // enemy bullets travel LEFT
+        // Enemy bullets travel LEFT
         setPos(x() - speed, y());
-        // remove when off-screen LEFT
-        if (x() + pixmap().width() < 0) {  // FIXED: was > 520
+        
+        // Remove when off-screen to the left
+        if (x() + pixmap().width() < 0) {
             if (scene()) scene()->removeItem(this);
             delete this;
         }
