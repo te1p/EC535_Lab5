@@ -28,8 +28,11 @@ StarVoyager Defender is a wave-based space shooter where players control a space
 ## Building and Running
 
 `cd StarVoyager_Defender`
+
 `qmake SpaceDefender.pro`
+
 `make`
+
 `./SpaceDefender`
 
 ## Future Improvements
