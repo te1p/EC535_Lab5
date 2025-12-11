@@ -4,16 +4,19 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 
-//Temporary explosion animation that deletes itself after displaying.
+// Explosion class: Temporary visual effect shown on collisions
+// Automatically removes itself after a brief display period (500ms)
 class Explosion : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
-
+    
 public:
+    // Constructor: Creates explosion effect at specified position
     Explosion(QGraphicsItem *parent = nullptr);
-
+    
 public slots:
-    void end();   //Removes the explosion from the scene
+    // Removes explosion from scene and deletes object
+    void end();
 };
 
 #endif // EXPLOSION_H
